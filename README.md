@@ -1,1 +1,0 @@
-# medassist-lung-agent
