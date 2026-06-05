@@ -94,4 +94,3 @@ python scripts/build_rag_index.py
 - 或你先在 GitHub 创建空仓库，再把地址发给我。
 
 不建议把 `.pth` 大模型权重直接提交到普通 GitHub 仓库；更推荐 Git LFS、Release、Hugging Face、网盘或在 README 写下载方式。
-
