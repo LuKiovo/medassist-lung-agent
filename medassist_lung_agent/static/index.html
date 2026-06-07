@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MedAssist Lung Agent</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="topbar">
+        <div>
+          <h1>MedAssist Lung Agent</h1>
+          <p>肺部 X 光辅助筛查与日常健康咨询</p>
+        </div>
+        <a class="docs-link" href="/docs">API Docs</a>
+      </section>
+
+      <section class="grid">
+        <article class="panel">
+          <div class="panel-head">
+            <h2>健康咨询</h2>
+            <span>RAG</span>
+          </div>
+          <textarea id="question" placeholder="例如：高烧多少度可以吃退烧药？吃完螃蟹能吃西瓜吗？"></textarea>
+          <div class="actions">
+            <button id="askBtn">咨询</button>
+            <button id="clearChatBtn" class="secondary">清空</button>
+          </div>
+          <div id="chatResult" class="result empty">回答会显示在这里。</div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <h2>胸片分析</h2>
+            <span>CNN</span>
+          </div>
+          <label class="upload">
+            <input id="xrayFile" type="file" accept="image/*" />
+            <span>选择胸部 X 光图片</span>
+          </label>
+          <div class="actions">
+            <button id="analyzeBtn">分析</button>
+          </div>
+          <div class="preview-wrap">
+            <img id="preview" alt="" />
+            <img id="heatmap" alt="" />
+          </div>
+          <div id="xrayResult" class="result empty">影像结果会显示在这里。</div>
+        </article>
+      </section>
+
+      <p class="disclaimer">
+        本系统仅用于学习、科研和辅助信息检索，不能替代医生诊断、处方或急救建议。
+      </p>
+    </main>
+    <script src="/static/app.js"></script>
+  </body>
+</html>

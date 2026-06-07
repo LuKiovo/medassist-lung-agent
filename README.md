@@ -13,6 +13,7 @@
 
 ## 功能
 
+- Web 演示页：`GET /`，可直接进行健康咨询和胸片上传分析。
 - `POST /api/xray/analyze`：上传胸片，返回 normal/pneumonia 概率和风险提示。
 - `POST /api/chat`：日常健康咨询，返回 RAG 检索依据、回答和就医红旗提醒。
 - `POST /api/rag/reindex`：重新构建本地知识库索引。
@@ -27,6 +28,7 @@ medassist_lung_agent/
   rag/              文档加载、爬取、TF-IDF 检索索引
   llm/              Qwen/本地模型接入与安全回答策略
   safety/           医疗红旗和免责声明
+  static/           Web 演示页面
 docs/knowledge/     RAG 种子知识库
 scripts/            运行、索引、爬取脚本
 ```
@@ -44,6 +46,7 @@ python -m uvicorn medassist_lung_agent.main:app --host 0.0.0.0 --port 8000
 访问 API 文档：
 
 ```text
+http://127.0.0.1:8000/
 http://127.0.0.1:8000/docs
 ```
 
@@ -59,6 +62,10 @@ $env:QWEN_MODEL_PATH="你的本地Qwen微调模型目录或HuggingFace模型名"
 ```
 
 如果 Qwen 模型较大，建议在算力云 GPU 服务器上运行，并使用 `QWEN_LOAD_IN_4BIT=1` 尝试 4-bit 加载。
+
+## 胸片可解释性
+
+胸片分析接口会额外返回 `gradcam_png_base64`，前端会显示 Grad-CAM 热力图，用于观察模型主要关注区域。它只能帮助理解模型行为，不能证明诊断结论正确。
 
 ## 添加 RAG 文档
 
@@ -85,6 +92,14 @@ python scripts/build_rag_index.py
 - 用 ChestX-ray14、RSNA Pneumonia Detection Challenge 或 CheXpert 做多标签任务，而不只是 normal/pneumonia。
 - 增加 AUROC、Sensitivity、Specificity、F1、混淆矩阵，README 中展示实验表格。
 - 对外部测试集做验证，说明泛化能力，简历上会比单一 accuracy 更可信。
+
+可以用已有测试集评估当前模型：
+
+```powershell
+python scripts/evaluate_cnn.py --data-dir F:\path\to\chest_xray\test
+```
+
+更多部署说明见 `docs/DEPLOYMENT.md`，后续规划见 `docs/ROADMAP.md`。
 
 ## GitHub 上传
 
