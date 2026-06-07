@@ -47,11 +47,11 @@ Windows 下脚本会优先使用 `py` 创建虚拟环境，找不到时再尝试
 手动启动：
 
 ```powershell
-python -m venv .venv
+py -m venv .venv
 .\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-python scripts/build_rag_index.py
-python -m uvicorn medassist_lung_agent.main:app --host 0.0.0.0 --port 8000
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe scripts/build_rag_index.py
+.\.venv\Scripts\python.exe -m uvicorn medassist_lung_agent.main:app --host 0.0.0.0 --port 8000
 ```
 
 访问 API 文档：
@@ -72,7 +72,9 @@ $env:RAG_INDEX_PATH="F:\Agent\data\rag_index.pkl"
 $env:QWEN_MODEL_PATH="你的本地Qwen微调模型目录或HuggingFace模型名"
 ```
 
-如果 Qwen 模型较大，建议在算力云 GPU 服务器上运行，并使用 `QWEN_LOAD_IN_4BIT=1` 尝试 4-bit 加载。
+也可以在项目根目录创建 `.env`，程序会自动读取。若 Qwen 模型较大，建议在算力云 GPU 服务器上运行，并使用 `QWEN_LOAD_IN_4BIT=1` 尝试 4-bit 加载。
+
+Qwen 详细接入方式见 `docs/QWEN_SETUP.md`。如果微调结果是 LoRA adapter，需要同时配置 `QWEN_BASE_MODEL_PATH` 和 `QWEN_ADAPTER_PATH`。
 
 ## 胸片可解释性
 
@@ -85,21 +87,21 @@ $env:QWEN_MODEL_PATH="你的本地Qwen微调模型目录或HuggingFace模型名"
 方式一：直接把 `.txt` / `.md` 放到 `docs/knowledge/`，然后重建索引：
 
 ```powershell
-python scripts/build_rag_index.py
+.\.venv\Scripts\python.exe scripts/build_rag_index.py
 ```
 
 方式二：生成本项目的种子知识库：
 
 ```powershell
-python scripts/generate_seed_knowledge.py
-python scripts/build_rag_index.py
+.\.venv\Scripts\python.exe scripts/generate_seed_knowledge.py
+.\.venv\Scripts\python.exe scripts/build_rag_index.py
 ```
 
 方式三：从网页下载清洗成 TXT：
 
 ```powershell
-python scripts/crawl_medical_docs.py --url https://medlineplus.gov/fever.html
-python scripts/build_rag_index.py
+.\.venv\Scripts\python.exe scripts/crawl_medical_docs.py --url https://medlineplus.gov/fever.html
+.\.venv\Scripts\python.exe scripts/build_rag_index.py
 ```
 
 建议优先使用可信来源，例如 MedlinePlus、CDC、Mayo Clinic、国家卫健委、三甲医院科普、临床指南。不要把论坛帖子作为主要依据。
@@ -116,7 +118,7 @@ python scripts/build_rag_index.py
 可以用已有测试集评估当前模型：
 
 ```powershell
-python scripts/evaluate_cnn.py --data-dir F:\path\to\chest_xray\test
+.\.venv\Scripts\python.exe scripts/evaluate_cnn.py --data-dir F:\path\to\chest_xray\test
 ```
 
 更多部署说明见 `docs/DEPLOYMENT.md`，后续规划见 `docs/ROADMAP.md`。
