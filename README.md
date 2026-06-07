@@ -35,6 +35,16 @@ scripts/            运行、索引、爬取脚本
 
 ## 快速开始
 
+Windows 一键启动：
+
+```powershell
+.\start_medassist.bat
+```
+
+脚本会创建虚拟环境、安装依赖、构建 RAG 索引、启动服务并打开网页。
+
+手动启动：
+
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
@@ -69,13 +79,22 @@ $env:QWEN_MODEL_PATH="你的本地Qwen微调模型目录或HuggingFace模型名"
 
 ## 添加 RAG 文档
 
+当前仓库包含 138 篇本项目整理的日常健康咨询与胸片辅助诊断种子文档，位于 `docs/knowledge/`。后续可继续用爬虫下载可信医学网页，替换或扩展这些种子文档。
+
 方式一：直接把 `.txt` / `.md` 放到 `docs/knowledge/`，然后重建索引：
 
 ```powershell
 python scripts/build_rag_index.py
 ```
 
-方式二：从网页下载清洗成 TXT：
+方式二：生成本项目的种子知识库：
+
+```powershell
+python scripts/generate_seed_knowledge.py
+python scripts/build_rag_index.py
+```
+
+方式三：从网页下载清洗成 TXT：
 
 ```powershell
 python scripts/crawl_medical_docs.py --url https://medlineplus.gov/fever.html
