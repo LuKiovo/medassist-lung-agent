@@ -16,7 +16,10 @@ function setResult(node, text, empty = false) {
 function formatCitations(citations) {
   if (!citations || citations.length === 0) return "";
   return citations
-    .map((item, index) => `\n[${index + 1}] ${item.source}\n${item.text.slice(0, 180)}...`)
+    .map((item, index) => {
+      const parts = item.source.replaceAll("\\", "/").split("/");
+      return `[${index + 1}] ${parts[parts.length - 1]}`;
+    })
     .join("\n");
 }
 
@@ -38,7 +41,8 @@ askBtn.addEventListener("click", async () => {
   }
   const data = await resp.json();
   const redFlags = data.red_flags?.length ? `\n\n红旗提醒：${data.red_flags.join("、")}` : "";
-  setResult(chatResult, `${data.answer}${redFlags}\n\n参考片段：${formatCitations(data.citations)}`);
+  const sources = formatCitations(data.citations);
+  setResult(chatResult, `${data.answer}${redFlags}${sources ? `\n\n参考来源：\n${sources}` : ""}`);
 });
 
 clearChatBtn.addEventListener("click", () => {
