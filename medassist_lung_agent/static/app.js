@@ -40,9 +40,22 @@ askBtn.addEventListener("click", async () => {
     return;
   }
   const data = await resp.json();
+  const meta = [
+    data.intent ? `意图：${data.intent}` : "",
+    data.urgency ? `紧急程度：${data.urgency}` : "",
+  ]
+    .filter(Boolean)
+    .join(" | ");
   const redFlags = data.red_flags?.length ? `\n\n红旗提醒：${data.red_flags.join("、")}` : "";
+  const actions = data.next_actions?.length ? `\n\n建议动作：\n${data.next_actions.map((x) => `- ${x}`).join("\n")}` : "";
+  const followUps = data.follow_up_questions?.length
+    ? `\n\n可补充信息：\n${data.follow_up_questions.map((x) => `- ${x}`).join("\n")}`
+    : "";
   const sources = formatCitations(data.citations);
-  setResult(chatResult, `${data.answer}${redFlags}${sources ? `\n\n参考来源：\n${sources}` : ""}`);
+  setResult(
+    chatResult,
+    `${meta ? `${meta}\n\n` : ""}${data.answer}${redFlags}${actions}${followUps}${sources ? `\n\n参考来源：\n${sources}` : ""}`
+  );
 });
 
 clearChatBtn.addEventListener("click", () => {

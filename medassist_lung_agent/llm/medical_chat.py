@@ -1,7 +1,8 @@
 from medassist_lung_agent.config import settings
+from medassist_lung_agent.agent.router import plan_consultation
 from medassist_lung_agent.llm.qwen_client import generate_with_qwen
 from medassist_lung_agent.rag.indexer import build_index, load_index, retrieve
-from medassist_lung_agent.safety.medical_safety import detect_red_flags, disclaimer
+from medassist_lung_agent.safety.medical_safety import disclaimer
 
 
 def _source_name(source: str) -> str:
@@ -80,13 +81,16 @@ def _fallback_answer(question: str, contexts: list[dict], red_flags: list[str]) 
 def answer_health_question(question: str, top_k: int = 4) -> dict:
     index = _get_index()
     contexts = retrieve(question, index, top_k=top_k)
-    red_flags = detect_red_flags(question)
+    decision = plan_consultation(question)
+    red_flags = decision.red_flags
     context_text = "\n\n".join(
         f"[来源: {ctx['source']} 分数: {ctx['score']:.3f}]\n{ctx['text']}" for ctx in contexts
     )
     prompt = f"""
 你是一个中文医疗健康科普助手。请严格基于检索资料回答，不要编造药物剂量或诊断结论。
 必须说明：不能替代医生诊断；出现红旗症状要就医。
+当前意图分类：{decision.intent}
+当前紧急程度：{decision.urgency}
 
 用户问题：
 {question}
@@ -99,6 +103,10 @@ def answer_health_question(question: str, top_k: int = 4) -> dict:
     answer = generate_with_qwen(prompt) or _fallback_answer(question, contexts, red_flags)
     return {
         "answer": answer,
+        "intent": decision.intent,
+        "urgency": decision.urgency,
+        "next_actions": decision.next_actions,
+        "follow_up_questions": decision.follow_up_questions,
         "red_flags": red_flags,
         "citations": contexts,
         "medical_disclaimer": disclaimer(),

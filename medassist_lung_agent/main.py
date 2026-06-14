@@ -7,6 +7,7 @@ from pathlib import Path
 from medassist_lung_agent.api.chat import router as chat_router
 from medassist_lung_agent.api.xray import router as xray_router
 from medassist_lung_agent.api.rag import router as rag_router
+from medassist_lung_agent.api.status import router as status_router
 
 STATIC_DIR = Path(__file__).resolve().parent / "static"
 
@@ -27,6 +28,7 @@ app.add_middleware(
 app.include_router(chat_router, prefix="/api/chat", tags=["chat"])
 app.include_router(xray_router, prefix="/api/xray", tags=["xray"])
 app.include_router(rag_router, prefix="/api/rag", tags=["rag"])
+app.include_router(status_router, prefix="/api/status", tags=["status"])
 
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 

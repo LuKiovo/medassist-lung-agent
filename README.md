@@ -17,6 +17,7 @@
 - `POST /api/xray/analyze`：上传胸片，返回 normal/pneumonia 概率和风险提示。
 - `POST /api/chat`：日常健康咨询，返回 RAG 检索依据、回答和就医红旗提醒。
 - `POST /api/rag/reindex`：重新构建本地知识库索引。
+- `GET /api/status`：查看 RAG、CNN、Qwen 配置状态。
 - `GET /api/health`：服务健康检查。
 
 ## 目录
@@ -76,6 +77,10 @@ $env:QWEN_MODEL_PATH="你的本地Qwen微调模型目录或HuggingFace模型名"
 
 Qwen 详细接入方式见 `docs/QWEN_SETUP.md`。如果微调结果是 LoRA adapter，需要同时配置 `QWEN_BASE_MODEL_PATH` 和 `QWEN_ADAPTER_PATH`。
 
+## 是否需要算力云
+
+本地可以跑 Web demo、TF-IDF RAG 和单张胸片 ResNet18 推理。接入 Qwen 大模型、重新训练 CNN、批量评估胸片或构建大规模 embedding 时，建议使用算力云 GPU 服务器。具体步骤见 `docs/CLOUD_SERVER_GUIDE.md`。
+
 ## 胸片可解释性
 
 胸片分析接口会额外返回 `gradcam_png_base64`，前端会显示 Grad-CAM 热力图，用于观察模型主要关注区域。它只能帮助理解模型行为，不能证明诊断结论正确。
@@ -122,6 +127,8 @@ Qwen 详细接入方式见 `docs/QWEN_SETUP.md`。如果微调结果是 LoRA ada
 ```
 
 更多部署说明见 `docs/DEPLOYMENT.md`，后续规划见 `docs/ROADMAP.md`。
+
+系统架构见 `docs/ARCHITECTURE.md`，当前成熟度和下一步建议见 `docs/PROJECT_STATUS.md`。
 
 ## GitHub 上传
 
