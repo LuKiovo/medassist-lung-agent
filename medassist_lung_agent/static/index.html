@@ -12,6 +12,11 @@
         <div>
           <h1>MedAssist Lung Agent</h1>
           <p>肺部 X 光辅助筛查与日常健康咨询</p>
+          <div class="comfort-tags" aria-label="能力标签">
+            <span>RAG 健康咨询</span>
+            <span>胸片辅助筛查</span>
+            <span>红旗症状提醒</span>
+          </div>
         </div>
         <a class="docs-link" href="/docs">API Docs</a>
       </section>
@@ -19,7 +24,10 @@
       <section class="grid">
         <article class="panel">
           <div class="panel-head">
-            <h2>健康咨询</h2>
+            <div>
+              <h2>健康咨询</h2>
+              <p>先检索知识库，再给出保守建议</p>
+            </div>
             <span>RAG</span>
           </div>
           <textarea id="question" placeholder="例如：高烧多少度可以吃退烧药？吃完螃蟹能吃西瓜吗？"></textarea>
@@ -32,7 +40,10 @@
 
         <article class="panel">
           <div class="panel-head">
-            <h2>胸片分析</h2>
+            <div>
+              <h2>胸片分析</h2>
+              <p>上传清晰胸片，查看概率与热力图</p>
+            </div>
             <span>CNN</span>
           </div>
           <label class="upload">
@@ -50,9 +61,7 @@
         </article>
       </section>
 
-      <p class="disclaimer">
-        本系统仅用于学习、科研和辅助信息检索，不能替代医生诊断、处方或急救建议。
-      </p>
+      <p class="disclaimer">本系统仅用于学习、科研和辅助信息检索，不能替代医生诊断、处方或急救建议。</p>
     </main>
     <script src="/static/app.js"></script>
   </body>
