@@ -15,7 +15,7 @@
 
 - Web 演示页：`GET /`，可直接进行健康咨询和胸片上传分析。
 - `POST /api/xray/analyze`：上传胸片，返回 normal/pneumonia 概率和风险提示。
-- `POST /api/chat`：日常健康咨询，返回 RAG 检索依据、回答和就医红旗提醒。
+- `POST /api/chat`：日常健康咨询，返回 RAG 检索依据、回答、追问项、就医红旗提醒和紧急资源。
 - `POST /api/rag/reindex`：重新构建本地知识库索引。
 - `GET /api/status`：查看 RAG、CNN、Qwen 配置状态。
 - `GET /api/health`：服务健康检查。
@@ -80,6 +80,10 @@ Qwen 详细接入方式见 `docs/QWEN_SETUP.md`。如果微调结果是 LoRA ada
 ## 是否需要算力云
 
 本地可以跑 Web demo、TF-IDF RAG 和单张胸片 ResNet18 推理。接入 Qwen 大模型、重新训练 CNN、批量评估胸片或构建大规模 embedding 时，建议使用算力云 GPU 服务器。具体步骤见 `docs/CLOUD_SERVER_GUIDE.md`。
+
+## Agent 交互
+
+健康咨询采用两阶段交互：用户先输入主问题，agent 判断意图和紧急程度，并返回追问项；前端会把追问项展示成卡片，用户可选择性填写后再次提交。若检测到 `emergency`，页面会弹出紧急提示窗口，显示 120 和人工医生入口占位。
 
 ## 胸片可解释性
 

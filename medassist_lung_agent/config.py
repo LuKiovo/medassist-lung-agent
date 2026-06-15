@@ -27,6 +27,7 @@ class Settings(BaseModel):
     qwen_base_model_path: str | None = os.getenv("QWEN_BASE_MODEL_PATH")
     qwen_adapter_path: str | None = os.getenv("QWEN_ADAPTER_PATH")
     qwen_load_in_4bit: bool = os.getenv("QWEN_LOAD_IN_4BIT", "0") == "1"
+    human_doctor_url: str = os.getenv("HUMAN_DOCTOR_URL", "/docs")
 
 
 settings = Settings()

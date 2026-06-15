@@ -9,6 +9,25 @@ def _source_name(source: str) -> str:
     return source.replace("\\", "/").split("/")[-1]
 
 
+def _clean_follow_up_answers(follow_up_answers: dict[str, str] | None) -> dict[str, str]:
+    if not follow_up_answers:
+        return {}
+    cleaned: dict[str, str] = {}
+    for question, answer in follow_up_answers.items():
+        q = str(question).strip()
+        a = str(answer).strip()
+        if q and a:
+            cleaned[q] = a[:500]
+    return cleaned
+
+
+def _format_follow_up_answers(follow_up_answers: dict[str, str]) -> str:
+    if not follow_up_answers:
+        return ""
+    lines = [f"- {question} {answer}" for question, answer in follow_up_answers.items()]
+    return "用户补充信息：\n" + "\n".join(lines)
+
+
 def _get_index():
     if not settings.rag_index_path.exists():
         return build_index(settings.rag_doc_dir, settings.rag_index_path)
@@ -60,9 +79,15 @@ def _common_answer(question: str, red_flags: list[str]) -> str | None:
     return None
 
 
-def _fallback_answer(question: str, contexts: list[dict], red_flags: list[str]) -> str:
+def _fallback_answer(question: str, contexts: list[dict], red_flags: list[str], follow_up_answers: dict[str, str] | None = None) -> str:
+    cleaned_answers = _clean_follow_up_answers(follow_up_answers)
+    supplement = _format_follow_up_answers(cleaned_answers)
     common = _common_answer(question, red_flags)
     if common:
+        if supplement:
+            return f"{common}\n\n我已参考你补充的信息：\n" + "\n".join(
+                f"- {question} {answer}" for question, answer in cleaned_answers.items()
+            )
         return common
 
     evidence = "\n".join(f"- {_source_name(ctx['source'])}: {ctx['text'][:160]}..." for ctx in contexts[:3])
@@ -74,13 +99,17 @@ def _fallback_answer(question: str, contexts: list[dict], red_flags: list[str]) 
         f"{urgent}"
         "我先根据知识库给你一个保守的科普建议：\n"
         f"{evidence}\n\n"
+        f"{supplement + chr(10) + chr(10) if supplement else ''}"
         "为了判断得更贴近实际，建议补充年龄、症状持续时间、严重程度、既往病史、正在用药和过敏史。涉及具体药物剂量、儿童、孕妇、慢病或症状持续加重时，请咨询医生或药师。"
     )
 
 
-def answer_health_question(question: str, top_k: int = 4) -> dict:
+def answer_health_question(question: str, top_k: int = 4, follow_up_answers: dict[str, str] | None = None) -> dict:
+    cleaned_answers = _clean_follow_up_answers(follow_up_answers)
+    supplemental_context = _format_follow_up_answers(cleaned_answers)
+    retrieval_query = f"{question}\n{supplemental_context}" if supplemental_context else question
     index = _get_index()
-    contexts = retrieve(question, index, top_k=top_k)
+    contexts = retrieve(retrieval_query, index, top_k=top_k)
     decision = plan_consultation(question)
     red_flags = decision.red_flags
     context_text = "\n\n".join(
@@ -95,19 +124,27 @@ def answer_health_question(question: str, top_k: int = 4) -> dict:
 用户问题：
 {question}
 
+{supplemental_context}
+
 检索资料：
 {context_text}
 
 请用中文给出结构清晰、谨慎、可执行的回答。
 """
-    answer = generate_with_qwen(prompt) or _fallback_answer(question, contexts, red_flags)
+    answer = generate_with_qwen(prompt) or _fallback_answer(question, contexts, red_flags, cleaned_answers)
     return {
         "answer": answer,
         "intent": decision.intent,
         "urgency": decision.urgency,
         "next_actions": decision.next_actions,
         "follow_up_questions": decision.follow_up_questions,
+        "follow_up_answers": cleaned_answers,
+        "supplemental_context": supplemental_context,
         "red_flags": red_flags,
         "citations": contexts,
+        "emergency_resources": {
+            "phone": "120",
+            "human_doctor_url": settings.human_doctor_url,
+        },
         "medical_disclaimer": disclaimer(),
     }

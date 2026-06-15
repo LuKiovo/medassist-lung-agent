@@ -248,6 +248,148 @@ textarea:focus {
   color: var(--warn);
 }
 
+.follow-up-card {
+  background: rgba(255, 253, 249, 0.9);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+  margin-top: 16px;
+  padding: 18px;
+}
+
+.follow-up-head {
+  align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.follow-up-head h3 {
+  color: #26313b;
+  font-size: 18px;
+  margin: 0 0 5px;
+}
+
+.follow-up-head p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.follow-up-head span {
+  background: var(--rose);
+  border-radius: 999px;
+  color: #6f5b53;
+  flex: 0 0 auto;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 7px 11px;
+}
+
+.follow-up-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.follow-up-chip {
+  background: var(--accent-soft);
+  border: 1px solid rgba(119, 149, 141, 0.24);
+  box-shadow: none;
+  color: var(--accent-strong);
+  font-size: 14px;
+  padding: 9px 12px;
+  text-align: left;
+}
+
+.follow-up-chip:hover {
+  background: #d8e7e2;
+}
+
+.follow-up-inputs {
+  display: grid;
+  gap: 10px;
+}
+
+.follow-up-input {
+  color: var(--muted);
+  display: grid;
+  font-size: 14px;
+  font-weight: 650;
+  gap: 7px;
+}
+
+.follow-up-input textarea {
+  min-height: 74px;
+  padding: 12px;
+}
+
+.modal-backdrop {
+  align-items: center;
+  background: rgba(45, 52, 64, 0.42);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 22px;
+  position: fixed;
+  z-index: 20;
+}
+
+.modal-backdrop[hidden] {
+  display: none;
+}
+
+.emergency-modal {
+  background: #fffdf9;
+  border: 1px solid #e3c8ba;
+  border-radius: 26px;
+  box-shadow: 0 24px 80px rgba(45, 52, 64, 0.22);
+  max-width: 480px;
+  padding: 26px;
+  text-align: center;
+  width: min(100%, 480px);
+}
+
+.emergency-modal h2 {
+  color: #7f4b3c;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.emergency-modal p {
+  color: var(--text);
+  line-height: 1.7;
+}
+
+.emergency-phone {
+  background: #f6e7df;
+  border: 1px solid #e0b9a8;
+  border-radius: 20px;
+  color: #8a432f;
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: 0;
+  margin: 18px auto;
+  padding: 14px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.doctor-link {
+  background: var(--warn);
+  border-radius: 14px;
+  color: #fff;
+  font-weight: 700;
+  padding: 12px 18px;
+  text-decoration: none;
+}
+
 .disclaimer {
   font-size: 14px;
   line-height: 1.6;
@@ -264,6 +406,10 @@ textarea:focus {
   .grid,
   .preview-wrap {
     grid-template-columns: 1fr;
+  }
+
+  .modal-actions {
+    flex-direction: column;
   }
 
   .panel {

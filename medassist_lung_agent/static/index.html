@@ -36,6 +36,21 @@
             <button id="clearChatBtn" class="secondary">清空</button>
           </div>
           <div id="chatResult" class="result empty">回答会显示在这里。</div>
+          <div id="followUpCard" class="follow-up-card" hidden>
+            <div class="follow-up-head">
+              <div>
+                <h3>补充信息</h3>
+                <p>可选择填写，填完后我会结合补充信息重新分析。</p>
+              </div>
+              <span id="followUpCount">0 项</span>
+            </div>
+            <div id="followUpButtons" class="follow-up-buttons"></div>
+            <div id="followUpInputs" class="follow-up-inputs"></div>
+            <div class="actions">
+              <button id="submitFollowUpBtn">确认补充信息</button>
+              <button id="skipFollowUpBtn" class="secondary">暂不补充</button>
+            </div>
+          </div>
         </article>
 
         <article class="panel">
@@ -63,6 +78,18 @@
 
       <p class="disclaimer">本系统仅用于学习、科研和辅助信息检索，不能替代医生诊断、处方或急救建议。</p>
     </main>
+
+    <div id="emergencyModal" class="modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="emergencyTitle">
+      <div class="emergency-modal">
+        <h2 id="emergencyTitle">请优先处理紧急风险</h2>
+        <p>你描述的情况可能需要立即线下评估。请尽快就医，必要时拨打急救电话。</p>
+        <div class="emergency-phone">120</div>
+        <div class="modal-actions">
+          <a id="humanDoctorLink" class="doctor-link" href="/docs">联系人工医生</a>
+          <button id="closeEmergencyBtn" class="secondary" type="button">我知道了</button>
+        </div>
+      </div>
+    </div>
     <script src="/static/app.js"></script>
   </body>
 </html>

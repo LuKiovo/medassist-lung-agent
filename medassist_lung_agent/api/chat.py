@@ -10,9 +10,9 @@ router = APIRouter()
 class ChatRequest(BaseModel):
     question: str = Field(..., min_length=2, max_length=2000)
     top_k: int = Field(4, ge=1, le=8)
+    follow_up_answers: dict[str, str] | None = None
 
 
 @router.post("")
 def chat(req: ChatRequest):
-    return answer_health_question(req.question, top_k=req.top_k)
-
+    return answer_health_question(req.question, top_k=req.top_k, follow_up_answers=req.follow_up_answers)
