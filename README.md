@@ -77,10 +77,6 @@ $env:QWEN_MODEL_PATH="你的本地Qwen微调模型目录或HuggingFace模型名"
 
 Qwen 详细接入方式见 `docs/QWEN_SETUP.md`。如果微调结果是 LoRA adapter，需要同时配置 `QWEN_BASE_MODEL_PATH` 和 `QWEN_ADAPTER_PATH`。
 
-## 是否需要算力云
-
-本地可以跑 Web demo、TF-IDF RAG 和单张胸片 ResNet18 推理。接入 Qwen 大模型、重新训练 CNN、批量评估胸片或构建大规模 embedding 时，建议使用算力云 GPU 服务器。具体步骤见 `docs/CLOUD_SERVER_GUIDE.md`。
-
 ## Agent 交互
 
 健康咨询采用两阶段交互：用户先输入主问题，agent 判断意图和紧急程度，并返回追问项；前端会把追问项展示成卡片，用户可选择性填写后再次提交。若检测到 `emergency`，页面会弹出紧急提示窗口，显示 120 和人工医生入口占位。
