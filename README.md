@@ -1,15 +1,15 @@
 # MedAssist Lung Agent
 
-一个面向简历和毕设继续扩展的医疗辅助 agent：支持肺部 X 光肺炎辅助筛查、日常健康咨询、RAG 检索增强回答，以及可扩展的医学知识库爬取/索引流程。
+一个医疗辅助 agent：支持肺部 X 光肺炎辅助筛查、日常健康咨询、RAG 检索增强回答，以及可扩展的医学知识库爬取/索引流程。
 
 > 重要声明：本项目只用于学习、科研和辅助信息检索，不能替代医生诊断、处方或急救建议。涉及胸痛、呼吸困难、持续高热、意识异常、严重脱水、婴幼儿/孕妇/老人/慢病患者等情况，应及时就医。
 
-## 你的个人贡献点
+## 个人贡献点
 
-- 使用你已经训练好的 ResNet18 肺炎二分类模型作为影像模块，默认读取 `F:\visual_project\best_model_resnet18.pth`。
+- 使用本地已经训练好的 ResNet18 肺炎二分类模型作为影像模块。
 - 健康咨询不是裸 LLM，而是先从可信医学资料中检索证据，再生成回答。
 - 提供医学文档下载/清洗/索引脚本，后续可以继续爬取中文指南、医院科普或教材 TXT。
-- 预留 Qwen 微调模型接入位置，可通过环境变量加载你 GitHub 上的微调模型。
+- 预留 Qwen 微调模型接入位置，可通过环境变量加载 GitHub 上的微调模型。
 
 ## 功能
 
@@ -117,7 +117,7 @@ Qwen 详细接入方式见 `docs/QWEN_SETUP.md`。如果微调结果是 LoRA ada
 
 ## 模型改进建议
 
-你现在的 CNN 是 ResNet18 二分类，可以作为第一版项目核心。后续可升级：
+现在的 CNN 是 ResNet18 二分类，可以作为第一版项目核心。后续可升级：
 
 - 换 DenseNet121 / EfficientNet，并加入 Grad-CAM，可解释性更适合医疗影像项目。
 - 用 ChestX-ray14、RSNA Pneumonia Detection Challenge 或 CheXpert 做多标签任务，而不只是 normal/pneumonia。
@@ -133,12 +133,3 @@ Qwen 详细接入方式见 `docs/QWEN_SETUP.md`。如果微调结果是 LoRA ada
 更多部署说明见 `docs/DEPLOYMENT.md`，后续规划见 `docs/ROADMAP.md`。
 
 系统架构见 `docs/ARCHITECTURE.md`，当前成熟度和下一步建议见 `docs/PROJECT_STATUS.md`。
-
-## GitHub 上传
-
-我可以帮你初始化 git、提交并推到 GitHub。需要满足其一：
-
-- 你本机已登录 GitHub，并且提供目标仓库 HTTPS/SSH 地址；
-- 或你先在 GitHub 创建空仓库，再把地址发给我。
-
-不建议把 `.pth` 大模型权重直接提交到普通 GitHub 仓库；更推荐 Git LFS、Release、Hugging Face、网盘或在 README 写下载方式。
